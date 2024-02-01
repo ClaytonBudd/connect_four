@@ -1,3 +1,1 @@
- # def add_node(node)
-  #   @nodes[node] = find_edges(node) 
-  # end
+    while @board.valid_input?(input) == false

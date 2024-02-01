@@ -1,10 +1,11 @@
 class Board
-  attr_reader :nodes
+  attr_accessor :nodes, :win
 
   def initialize
     @nodes = {}
     @diagonal_left_heads = [[3,1],[2,1],[1,1],[1,2],[1,3],[1,4]]
     @diagonal_right_heads = [[3,7],[2,7],[1,7],[1,6],[1,5],[1,4]]
+    @win = false
   end
 
   def add_node(node)
@@ -74,8 +75,11 @@ class Board
   end
       
   def valid_input?(input)
-    true if input > 0 && input < 8
-    false
+    if input > 0 && input < 8
+      return true
+    else
+      false
+    end
   end
 
   def column_room?(column)
@@ -87,7 +91,7 @@ class Board
     current = [row, 1]
     count = 0
     7.times do
-      if @nodes[current] == marker
+      if @nodes[current] == "[" + marker + "]"
         count += 1
       else
         count = 0  
@@ -104,8 +108,9 @@ class Board
   def win_column?(column, marker)
     current = [1, column]
     count = 0
-    7.times do
-      if @nodes[current] == marker
+    6.times do
+      nodes = @nodes[current]
+      if @nodes[current] == "[" + marker + "]"
         count +=1
       else
         count = 0
@@ -113,7 +118,8 @@ class Board
 
       current[0] +=1
 
-      return true if count ==4
+      return true if count == 4
+      
 
     end
     false
@@ -169,7 +175,7 @@ class Board
 
     count = 0
     while current[0] < 7 && current[1] < 8
-      if @nodes[current] == marker
+      if @nodes[current] == "[" + marker + "]"
         count += 1
       else
         count = 0
@@ -192,7 +198,7 @@ class Board
 
     count = 0
     while current[0] < 7 && current[1] > 0
-      if @nodes[current] == marker
+      if @nodes[current] == "[" + marker + "]"
         count += 1
       else
         count = 0
@@ -207,6 +213,19 @@ class Board
     false
   end
 
+  def check_win(input, player)
+    if win_row?(input, player)
+      @win = true
+    elsif win_column?(input, player)
+      @win = true
+    elsif win_diagonal_left?(input, player)
+      @win = true
+    elsif win_diagonal_right?(input, player)
+      @win = true
+    else
+    end
+  end
+
 end
 
 # board = Board.new
@@ -214,12 +233,12 @@ end
 # board.unmark_board
 # #board.display_board
 # board.mark_board(1, "B")
-# board.mark_board(2, "B")
+# board.mark_board(2, "W")
 # board.mark_board(1, "B")
-# board.mark_board(2, "B")
-# board.mark_board(3, "W")
-# board.mark_board(4, "W")
-# board.mark_board(3, "W")
+# board.mark_board(2, "W")
+# board.mark_board(1, "B")
+# board.mark_board(2, "W")
+# board.mark_board(1, "B")
 # board.mark_board(4, "W")
 # board.mark_board(5, "B")
 # board.mark_board(4, "B")
@@ -230,7 +249,7 @@ end
 # board.mark_board(6, "W")
 # board.mark_board(3, "W")
 # board.display_board
-# #puts "#{board.win_row?(6, "[W]")}"
+# puts "#{board.win_column?(1, "B")}"
 # #puts "#{board.win_column?(6,"[B]")}"
 # #puts board.win_diagonal_left?(7, "[W]")
 # #puts board.win_diagonal_right?(7, "[B]")

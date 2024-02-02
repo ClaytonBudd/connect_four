@@ -58,11 +58,13 @@ class Board
     end
   end
 
-  def win_row?(column, marker, row_modifier, column_modifier)
-    row = find_row(column)
-    current = [row[0], 1]
+
+  def win_row?(current, marker, row_modifier, column_modifier)
+    
+    return false if current == nil
     count = 0
-    7.times do
+
+    while current[0] < 7 && current[1] < 8
       if @nodes[current] == "[" + marker + "]"
         count += 1
       else
@@ -120,64 +122,23 @@ class Board
     return nil
   end
 
-  def win_diagonal_left?(column, marker, row_modifier, column_modifier)
-    node = find_row(column)
-    current = scan_diag_left(node)
-    
-    return false if current == nil
 
-    count = 0
-    while current[0] < 7 && current[1] < 8
-      if @nodes[current] == "[" + marker + "]"
-        count += 1
-      else
-        count = 0
-      end
-      
-      current[0] += row_modifier
-      current[1] += column_modifier
 
-      return true if count == 4
 
-    end
-    false
-  end
-
-  def win_diagonal_right?(column, marker)
-    node = find_row(column)
-    current = scan_diag_right(node)
-    
-    return false if current == nil
-
-    count = 0
-    while current[0] < 7 && current[1] > 0
-      if @nodes[current] == "[" + marker + "]"
-        count += 1
-      else
-        count = 0
-      end
-      
-      current[0] +=1
-      current[1] -=1
-
-      return true if count == 4
-
-    end
-    false
-  end
 
   def check_win(input, player)
-    #row
-    if win_row?(input, player, 0, 1)
+    current = find_row(input)
+    scan_left = scan_diag_left(current)
+    scan_right = scan_diag_right(current)
+    row = [current[0], 1]
+    column = [1,current[1]]
+    if win_row?(row, player, 0, 1)
       @win = true
-    #column
-    elsif win_row?(input, player, 1, 0)
+    elsif win_row?(column, player, 1, 0)
       @win = true
-    #diagonal left
-    elsif win_diagonal_left?(input, player, 1, 1)
+    elsif win_row?(current, player, 1, 1)
       @win = true
-    #diagonal right
-    elsif win_diagonal_left?(input, player, 1, -1)
+    elsif win_row?(current, player, 1, -1)
       @win = true
     else
     end

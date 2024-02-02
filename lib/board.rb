@@ -6,39 +6,15 @@ class Board
     @diagonal_left_heads = [[3,1],[2,1],[1,1],[1,2],[1,3],[1,4]]
     @diagonal_right_heads = [[3,7],[2,7],[1,7],[1,6],[1,5],[1,4]]
     @win = false
+    self.board
   end
 
-  def add_node(node)
-    @nodes[node] = find_edges(node) 
-  end
-
-  def unmark_board
-    @nodes.each do | k, v | @nodes[k] = "[ ]"
-    end
-  end  
-
-  def build_board(node = [1,1])
-    queue = [node]
-    visited = []
-    while queue != []
-      current = queue.shift
-      next if visited.include? current
-
-      edges = add_node(current)
-      edges.to_a.each { |e| queue.append(e) }
-      visited.append(current) unless visited.include?(current)
-
-    end
-  end
-
-  def find_edges(node)
-    possible_edges = [[-1,0],[-1,1],[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1]]
-
-    legal_edges = []
-    possible_edges.each { |a,b| legal_edges.append([node[0] + a, node[1] + b])}
-    legal_edges.select! { | row | row[0] > 0 && row[0] < 7 }
-    legal_edges.select! { | column | column[1] > 0 && column[1] < 8} 
-    legal_edges
+  def board()
+    6.times do |row|
+      7.times do |column|
+        @nodes[[row+1, column+1]] = "[ ]"
+      end
+   end 
   end
    
   def display_board
@@ -224,9 +200,7 @@ class Board
 
 end
 
-board = Board.new
-board.build_board
-board.unmark_board
+# board = Board.new
 # board.mark_board(1, "B")
 # board.mark_board(2, "B")
 # board.mark_board(2, "B")

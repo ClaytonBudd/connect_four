@@ -1,1 +1,6 @@
-    while @board.valid_input?(input) == false
+board.mark_board(3, "B")
+# board.mark_board(3, "W")
+# board.mark_board(4, "B")
+# board.mark_board(3, "W")
+# board.mark_board(6, "W")
+# board.mark_board(3, "W")

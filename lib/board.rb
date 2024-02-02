@@ -87,8 +87,9 @@ class Board
     true
   end
 
-  def win_row?(row, marker)
-    current = [row, 1]
+  def win_row?(column, marker)
+    row = find_row(column)
+    current = [row[0], 1]
     count = 0
     7.times do
       if @nodes[current] == "[" + marker + "]"
@@ -125,7 +126,7 @@ class Board
     false
   end
 
-  def find_top_marker(column)
+  def find_row(column)
     current = [1, column]
     while @nodes[current] == "[ ]"
       current[0] += 1
@@ -134,10 +135,10 @@ class Board
   end
 
   def scan_diag_left(node)
-    stack = @diagonal_left_heads
+    stack = @diagonal_left_heads.clone.map(&:clone)
     while stack != []
       head = stack.shift
-      current = [head[0],head[1]]
+      current = head.dup
       while current[0] < 7 && current[1] < 8
         if current == node
           return head
@@ -151,10 +152,10 @@ class Board
   end
 
   def scan_diag_right(node)
-    stack = @diagonal_right_heads
+    stack = @diagonal_right_heads.clone.map(&:clone)
     while stack != []
       head = stack.shift
-      current = [head[0],head[1]]
+      current = head.dup
       while current[0] < 7 && current[1] > 0
         if current == node
           return head
@@ -168,7 +169,7 @@ class Board
   end
 
   def win_diagonal_left?(column, marker)
-    node = find_top_marker(column)
+    node = find_row(column)
     current = scan_diag_left(node)
     
     return false if current == nil
@@ -191,7 +192,7 @@ class Board
   end
 
   def win_diagonal_right?(column, marker)
-    node = find_top_marker(column)
+    node = find_row(column)
     current = scan_diag_right(node)
     
     return false if current == nil
@@ -231,28 +232,28 @@ end
 # board = Board.new
 # board.build_board
 # board.unmark_board
-# #board.display_board
 # board.mark_board(1, "B")
-# board.mark_board(2, "W")
-# board.mark_board(1, "B")
-# board.mark_board(2, "W")
-# board.mark_board(1, "B")
-# board.mark_board(2, "W")
-# board.mark_board(1, "B")
-# board.mark_board(4, "W")
-# board.mark_board(5, "B")
-# board.mark_board(4, "B")
+# board.mark_board(2, "B")
+# board.mark_board(2, "B")
+# board.mark_board(3, "W")
+# board.mark_board(3, "W")
 # board.mark_board(3, "B")
-# board.mark_board(3, "W")
+# board.mark_board(4, "W")
 # board.mark_board(4, "B")
-# board.mark_board(3, "W")
-# board.mark_board(6, "W")
-# board.mark_board(3, "W")
+# board.mark_board(4, "W")
+# board.mark_board(4, "B")
+# board.mark_board(2, "W")
+# board.mark_board(1, "B")
+# board.mark_board(1, "W")
+# board.mark_board(1, "W")
+# # # board.mark_board(6, "W")
+# # # board.mark_board(3, "W")
 # board.display_board
-# puts "#{board.win_column?(1, "B")}"
-# #puts "#{board.win_column?(6,"[B]")}"
-# #puts board.win_diagonal_left?(7, "[W]")
-# #puts board.win_diagonal_right?(7, "[B]")
+# # puts "#{board.win_row?(3, "B")}"
+# # # puts "#{board.win_column?(1, "B")}"
+# # # #puts "#{board.win_column?(6,"[B]")}"
+# puts board.win_diagonal_right?(4, "B")
+# puts board.win_diagonal_left?(1, "W")
 
 
 

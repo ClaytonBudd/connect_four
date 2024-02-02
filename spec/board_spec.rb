@@ -18,36 +18,57 @@ describe Board do
     end
   end
 
-  describe "#add_node" do
-    it "takes a node and finds all connections to itself" do
-      expect(subject.add_node([3,3])).to eq([[2,3],[2,4],[3,4],[4,4],[4,3],[4,2],[3,2],[2,2]])
+  describe "#mark_board" do
+    
+    context "mark board with B" do
+      it "changes node value to marker" do
+      
+      end
     end
-  end
+  
 
-  # describe "#unmark_board" do
-  #   it "replaces node edges with '[ ]' " do
-  #     @nodes = double({[1,1]=>[[1,2],[2,2],[2,1]]})
-  #     subject.unmark_board
-  #     expect(@nodes).to eq({[1,1] => "[ ]"})
-  #   end
-  # end
-
-  context "mark board with B" do
-    describe "#mark_board" do
+    context "mark board with W" do
       it "changes node value to marker" do
       
       end
     end
   end
 
-  context "mark board with W" do
-    describe "#mark_board" do
-      it "changes node value to marker" do
-      
+  describe "#win_row?" do
+    context "there is a consecutive win condition" do
+      it "returns true" do
+        subject.nodes = {[1, 1]=>"[W]", [1, 2]=>"[W]", [1, 3]=>"[W]", [1, 4]=>"[W]",[1, 5]=>"[ ]", [1, 6]=>"[ ]", [1, 7]=>"[ ]"}
+        expect(subject.win_row?(1,"W")).to be(true)
+    end
+  end
+
+    context "there is a broken up win condition" do
+      it "returns true" do
+        subject.nodes = {[1, 1]=>"[W]", [1, 2]=>"[B]", [1, 3]=>"[W]", [1, 4]=>"[W]",[1, 5]=>"[W]", [1, 6]=>"[W]", [1, 7]=>"[ ]"}
+        expect(subject.win_row?(1,"W")).to be(true)
+    end
+  end
+
+    context "there is no win condition" do  
+      it "returns false" do
+        subject.nodes = {[1, 1]=>"[]", [1, 2]=>"[W]", [1, 3]=>"[W]", [1, 4]=>"[W]",[1, 5]=>"[ ]", [1, 6]=>"[ ]", [1, 7]=>"[ ]"}
+        expect(subject.win_row?(1,"W")).to be(false)
       end
     end
   end
 
-  context ""
+  describe "#scan_diag_left" do
+
+    context "if the input node exists in a diagonal" do
+      it "returns the first node in the diagonal"
+    end
+
+    context "if the input node does not exist in a diagonal" do
+      it "returns nil"
+    end
+  end
+
+
+
 
 end

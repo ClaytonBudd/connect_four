@@ -82,11 +82,6 @@ class Board
     end
   end
 
-  def column_room?(column)
-    false if column.size > 6
-    true
-  end
-
   def win_row?(column, marker)
     row = find_row(column)
     current = [row[0], 1]
@@ -229,9 +224,9 @@ class Board
 
 end
 
-# board = Board.new
-# board.build_board
-# board.unmark_board
+board = Board.new
+board.build_board
+board.unmark_board
 # board.mark_board(1, "B")
 # board.mark_board(2, "B")
 # board.mark_board(2, "B")

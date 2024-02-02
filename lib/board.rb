@@ -58,7 +58,7 @@ class Board
     end
   end
 
-  def win_row?(column, marker)
+  def win_row?(column, marker, row_modifier, column_modifier)
     row = find_row(column)
     current = [row[0], 1]
     count = 0
@@ -69,29 +69,10 @@ class Board
         count = 0  
       end
 
-      current[1] += 1  
+      current[0] += row_modifier
+      current[1] += column_modifier  
       
       return true if count == 4
-
-    end
-    false
-  end
-
-  def win_column?(column, marker)
-    current = [1, column]
-    count = 0
-    6.times do
-      nodes = @nodes[current]
-      if @nodes[current] == "[" + marker + "]"
-        count +=1
-      else
-        count = 0
-      end
-
-      current[0] +=1
-
-      return true if count == 4
-      
 
     end
     false
@@ -139,7 +120,7 @@ class Board
     return nil
   end
 
-  def win_diagonal_left?(column, marker)
+  def win_diagonal_left?(column, marker, row_modifier, column_modifier)
     node = find_row(column)
     current = scan_diag_left(node)
     
@@ -153,8 +134,8 @@ class Board
         count = 0
       end
       
-      current[0] +=1
-      current[1] +=1
+      current[0] += row_modifier
+      current[1] += column_modifier
 
       return true if count == 4
 
@@ -186,13 +167,17 @@ class Board
   end
 
   def check_win(input, player)
-    if win_row?(input, player)
+    #row
+    if win_row?(input, player, 0, 1)
       @win = true
-    elsif win_column?(input, player)
+    #column
+    elsif win_row?(input, player, 1, 0)
       @win = true
-    elsif win_diagonal_left?(input, player)
+    #diagonal left
+    elsif win_diagonal_left?(input, player, 1, 1)
       @win = true
-    elsif win_diagonal_right?(input, player)
+    #diagonal right
+    elsif win_diagonal_left?(input, player, 1, -1)
       @win = true
     else
     end

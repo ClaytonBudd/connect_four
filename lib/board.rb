@@ -1,5 +1,5 @@
 class Board
-  attr_accessor :nodes, :win
+  attr_accessor :nodes, :win, :diagonal_left_heads, :diagonal_right_heads
 
   def initialize
     @nodes = {}
@@ -21,14 +21,14 @@ class Board
     keys = @nodes.keys
     keys.sort!
     index = 0
+    print " (1)  (2)  (3)  (4)  (5)  (6)  (7) " + "\n"
     6.times do
       7.times do
         print " " + "#{@nodes[keys[index]]}" + " " 
         index +=1
       end
       puts "\n"
-    end
-      
+    end   
   end
 
   def player_input(current_player)
@@ -58,8 +58,11 @@ class Board
     end
   end
 
+  def column_full?(input)
+   return true if @nodes[[1, input]] != "[ ]"
+  end
 
-  def win_row?(current, marker, row_modifier, column_modifier)
+  def win?(current, marker, row_modifier, column_modifier)
     
     return false if current == nil
     count = 0
@@ -88,59 +91,55 @@ class Board
     return current
   end
 
-  def scan_diag_left(node)
-    stack = @diagonal_left_heads.clone.map(&:clone)
+  # def scan_diag_left(node, direction)
+  #   stack = direction.clone.map(&:clone)
+  #   while stack != []
+  #     head = stack.shift
+  #     current = head.dup
+  #     while current[0] < 7 && current[1] < 8
+  #       if current == node
+  #         return head
+  #       else
+  #         current[0] +=1
+  #         current[1] +=1
+  #       end
+  #     end
+  #   end
+  #   return nil
+  # end
+
+  def find_diagonal_start(node, direction, row_modifier, column_modifier)
+    stack = direction.clone.map(&:clone)
+
     while stack != []
       head = stack.shift
       current = head.dup
-      while current[0] < 7 && current[1] < 8
+      while current[0].between?(0,7) && current[1].between?(0,8)
         if current == node
           return head
         else
-          current[0] +=1
-          current[1] +=1
+          current[0] += row_modifier
+          current[1] += column_modifier
         end
       end
     end
     return nil
   end
-
-  def scan_diag_right(node)
-    stack = @diagonal_right_heads.clone.map(&:clone)
-    while stack != []
-      head = stack.shift
-      current = head.dup
-      while current[0] < 7 && current[1] > 0
-        if current == node
-          return head
-        else
-          current[0] +=1
-          current[1] -=1
-        end
-      end
-    end
-    return nil
-  end
-
-
-
-
 
   def check_win(input, player)
     current = find_row(input)
-    scan_left = scan_diag_left(current)
-    scan_right = scan_diag_right(current)
+    scan_left = find_diagonal_start(current, @diagonal_left_heads, 1, 1)
+    scan_right = find_diagonal_start(current, @diagonal_right_heads, 1, -1)
     row = [current[0], 1]
     column = [1,current[1]]
-    if win_row?(row, player, 0, 1)
+    if win?(row, player, 0, 1)
       @win = true
-    elsif win_row?(column, player, 1, 0)
+    elsif win?(column, player, 1, 0)
       @win = true
-    elsif win_row?(current, player, 1, 1)
+    elsif win?(scan_left, player, 1, 1)
       @win = true
-    elsif win_row?(current, player, 1, -1)
+    elsif win?(scan_right, player, 1, -1)
       @win = true
-    else
     end
   end
 
@@ -150,20 +149,21 @@ end
 # board.mark_board(1, "B")
 # board.mark_board(2, "B")
 # board.mark_board(2, "B")
-# board.mark_board(3, "W")
-# board.mark_board(3, "W")
-# board.mark_board(3, "B")
-# board.mark_board(4, "W")
-# board.mark_board(4, "B")
-# board.mark_board(4, "W")
+# board.mark_board(1, "W")
+# board.mark_board(1, "W")
+# board.mark_board(2, "B")
+# board.mark_board(2, "W")
+# board.mark_board(2, "B")
+# board.mark_board(2, "W")
 # board.mark_board(4, "B")
 # board.mark_board(2, "W")
 # board.mark_board(1, "B")
 # board.mark_board(1, "W")
 # board.mark_board(1, "W")
-# # # board.mark_board(6, "W")
-# # # board.mark_board(3, "W")
+# # # # board.mark_board(6, "W")
+# # # # board.mark_board(3, "W")
 # board.display_board
+# puts "#{board.column_full?(2)}"
 # # puts "#{board.win_row?(3, "B")}"
 # # # puts "#{board.win_column?(1, "B")}"
 # # # #puts "#{board.win_column?(6,"[B]")}"

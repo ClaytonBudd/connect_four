@@ -13,5 +13,9 @@ class Messages
     board.display_board
     puts "#{game.current_player.player_id}" + " Wins!"
   end
+
+  def full_column()
+    puts "-----That column is full please choose another one-----"
+  end
     
 end

@@ -11,8 +11,6 @@ class Game
     @player_2 = Player.new("W", "player_2")
     @current_player = [@player_1, @player_2].sample
     @board = Board.new
-    #@board.build_board
-    #@board.unmark_board
     @messages = Messages.new
     @turns = 0
   end
@@ -23,7 +21,12 @@ class Game
     next_player(@current_player)
     input = @board.player_input(@current_player)
 
-    while @board.valid_input?(input) == false
+    while @board.column_full?(input) == true
+      @messages.full_column
+      input = @board.player_input(@current_player)
+    end
+
+    while @board.valid_input?(input) == false || @board.column_full?(input) == true
       @messages.invalid_selection
       input = @board.player_input(@current_player)
     end
@@ -47,22 +50,20 @@ class Game
       else
         play_round
       end
-
     end
     @messages.win(self, @board)
   end
 
-
-
   def next_player(current_player)
     if current_player == @player_1
       @current_player = @player_2
-    else @current_player = @player_1
+    else 
+      @current_player = @player_1
+    end
   end
+
 end
 
   
-end
-
 game = Game.new
 game.play_game

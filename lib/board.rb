@@ -83,30 +83,13 @@ class Board
     false
   end
 
-  def find_row(column)
+  def find_row_start(column)
     current = [1, column]
     while @nodes[current] == "[ ]"
       current[0] += 1
     end
     return current
   end
-
-  # def scan_diag_left(node, direction)
-  #   stack = direction.clone.map(&:clone)
-  #   while stack != []
-  #     head = stack.shift
-  #     current = head.dup
-  #     while current[0] < 7 && current[1] < 8
-  #       if current == node
-  #         return head
-  #       else
-  #         current[0] +=1
-  #         current[1] +=1
-  #       end
-  #     end
-  #   end
-  #   return nil
-  # end
 
   def find_diagonal_start(node, direction, row_modifier, column_modifier)
     stack = direction.clone.map(&:clone)
@@ -127,7 +110,7 @@ class Board
   end
 
   def check_win(input, player)
-    current = find_row(input)
+    current = find_row_start(input)
     scan_left = find_diagonal_start(current, @diagonal_left_heads, 1, 1)
     scan_right = find_diagonal_start(current, @diagonal_right_heads, 1, -1)
     row = [current[0], 1]
@@ -144,32 +127,3 @@ class Board
   end
 
 end
-
-# board = Board.new
-# board.mark_board(1, "B")
-# board.mark_board(2, "B")
-# board.mark_board(2, "B")
-# board.mark_board(1, "W")
-# board.mark_board(1, "W")
-# board.mark_board(2, "B")
-# board.mark_board(2, "W")
-# board.mark_board(2, "B")
-# board.mark_board(2, "W")
-# board.mark_board(4, "B")
-# board.mark_board(2, "W")
-# board.mark_board(1, "B")
-# board.mark_board(1, "W")
-# board.mark_board(1, "W")
-# # # # board.mark_board(6, "W")
-# # # # board.mark_board(3, "W")
-# board.display_board
-# puts "#{board.column_full?(2)}"
-# # puts "#{board.win_row?(3, "B")}"
-# # # puts "#{board.win_column?(1, "B")}"
-# # # #puts "#{board.win_column?(6,"[B]")}"
-# puts board.win_diagonal_right?(4, "B")
-# puts board.win_diagonal_left?(1, "W")
-
-
-
-# next put it all together with player turns and test it out.
